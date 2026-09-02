@@ -29,7 +29,13 @@ import os
 import os
 from dotenv import load_dotenv
 from google.adk.agents import LlmAgent
-from google.adk.runners import InProcessRunner
+try:
+    from google.adk.runners import InMemoryRunner as InProcessRunner
+except ImportError:
+    try:
+        from google.adk.runners import Runner as InProcessRunner
+    except ImportError:
+        from google.adk.runners import InProcessRunner
 from google.adk.sessions import InMemorySessionService
 from google.adk.tools import FunctionTool
 from google.genai import types

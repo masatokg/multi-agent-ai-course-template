@@ -10,7 +10,13 @@ multi_agent.py - 第7章 A2A：マルチエージェントシステム
 import os
 from dotenv import load_dotenv
 from google.adk.agents import LlmAgent
-from google.adk.runners import InProcessRunner
+try:
+    from google.adk.runners import InMemoryRunner as InProcessRunner
+except ImportError:
+    try:
+        from google.adk.runners import Runner as InProcessRunner
+    except ImportError:
+        from google.adk.runners import InProcessRunner
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
 
@@ -38,9 +44,11 @@ analysis_agent = LlmAgent(
 proposal_agent = LlmAgent(
     model="gemini-3.6-flash",
     name="proposal_agent",
-    （各対策を実施した場合の期待効果）
-
-    提案は実行可能で具体的なものにしてください。
+    description="分析結果に基づいた具体的な解決策・改善案を提示する専門エージェント",
+    instruction="""
+    あなたは戦略コンサルタントです。
+    分析結果を受け取り、具体的で実行可能な改善策を3案提案してください。
+    各提案には「期待できる効果」も含めてください。
     """,
 )
 
