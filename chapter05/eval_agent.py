@@ -117,14 +117,16 @@ def confirm_order(approved: bool) -> dict:
     # if approved:
     #     return {"status": "success", "message": f"注文が確定されました！{order['item']}を発送します。"}
     # else:
-    #     return {"status": "cancelled", "message": "注文はキャンセルされました。"}
-    pass
+    if approved:
+        return {"status": "success", "message": f"注文が確定されました！{order['item']}を発送します。"}
+    else:
+        return {"status": "cancelled", "message": "注文はキャンセルされました。"}
 
 
 # エージェントの定義（完成済み）
 root_agent = LlmAgent(
-    model="gemini-2.0-flash",
-    name="guardrail_hitl_agent",
+    model="gemini-2.5-flash",
+    name="evaluated_agent",
     instruction="""
     あなたは発注システムのアシスタントです。
 

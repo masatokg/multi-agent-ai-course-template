@@ -171,10 +171,21 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```powershell
 .\change_key.ps1
 ```
-これで 5秒で新しいキーに切り替わり、すぐに演習を再開できます。
+### Q. 🚨 503エラー（Service Unavailable / サーバー高負荷）が発生した
+**A.** GoogleのGemini APIサーバー側が混雑している際に503エラーが発生することがあります。
 
+#### 対処法：
+Pythonコード内のモデル名を、別の利用可能なモデルに一時的に変更してください。
 
----
+```python
+# 変更前（デフォルト）
+root_agent = LlmAgent(model="gemini-2.5-flash", ...)
+
+# 変更例（503エラー回避用モデル）
+root_agent = LlmAgent(model="gemini-2.0-flash", ...)  # または "gemini-1.5-flash"
+```
+モデル名を変更して保存し、再度 `python xxxx_agent.py` を実行してください。
+
+----
 
 *このガイドは授業用に作成されました。*
-

@@ -103,7 +103,7 @@ def get_weather(city: str) -> dict:
 # ──────────────────────────────────────────────────────────────────────────────
 
 root_agent = LlmAgent(
-    model="gemini-2.0-flash",
+    model="gemini-2.5-flash",
     name="tool_demo_agent",
     instruction="""
     あなたは計算と天気情報の取得ができるアシスタントです。
@@ -115,6 +115,10 @@ root_agent = LlmAgent(
     結果は日本語でわかりやすく伝えてください。
     """,
     # ↓↓↓ ここに 【穴埋め【2】】 の tools=[...] 引数を記述してください ↓↓↓
+    tools=[
+        FunctionTool(func=calculate),
+        FunctionTool(func=get_weather),
+    ],
 )
 
 

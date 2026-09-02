@@ -47,7 +47,7 @@ load_dotenv(override=True)
 # │  実際の動作の安定性のために追加しています。
 # └─────────────────────────────────────────────────────────────────────────────
 research_agent = LlmAgent(
-    model="gemini-2.0-flash",
+    model="gemini-2.5-flash",
     name="research_agent",
     instruction="""
     あなたはリサーチ専門のエージェントです。
@@ -59,13 +59,9 @@ research_agent = LlmAgent(
 
     ## 主要なポイント（3つ）
     1. （ポイント1）
-    2. （ポイント2）
-    3. （ポイント3）
-
-    ## 注意点
-    （重要な注意事項や落とし穴）
-
-    情報は正確に、わかりやすくまとめてください。
+    あなたは最新テクノロジーの調査専門のエージェントです。
+    ユーザーからテーマを受け取ったら、重要なキーポイントを3〜5個にまとめて抽出してください。
+    回答は箇条書きで、事実のみを簡潔に記述してください。
     """,
 )
 
@@ -74,7 +70,7 @@ research_agent = LlmAgent(
 # サブエージェント【2】：執筆担当
 # ──────────────────────────────────────────────────────────────────────────────
 writer_agent = LlmAgent(
-    model="gemini-2.0-flash",
+    model="gemini-2.5-flash",
     name="writer_agent",
     instruction="""
     あなたはわかりやすい文章を書く専門のエージェントです。
@@ -118,7 +114,7 @@ writer_agent = LlmAgent(
 # │  （より柔軟ですが、SequentialAgent より動作が「AIの判断依存」になります）。
 # └─────────────────────────────────────────────────────────────────────────────
 root_agent = LlmAgent(
-    model="gemini-2.0-flash",
+    model="gemini-2.5-flash",
     name="orchestrator_agent",
     instruction="""
     あなたはレポート作成チームのリーダーです。

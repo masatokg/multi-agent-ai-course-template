@@ -83,8 +83,8 @@ def search_knowledge(query: str) -> dict:
 from google.adk.tools import FunctionTool  # noqa: E402
 
 root_agent = LlmAgent(
-    model="gemini-2.0-flash",
-    name="memory_agent",
+    model="gemini-2.5-flash",
+    name="memory_rag_agent",
     instruction="""
     あなたは「AIエージェント入門」コースの専属アシスタントです。
 

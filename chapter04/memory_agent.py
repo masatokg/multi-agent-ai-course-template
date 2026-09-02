@@ -65,13 +65,19 @@ def search_knowledge(query: str) -> dict:
         検索結果を含む辞書
     """
     # ↓↓↓ ここに 【穴埋め【1】】 のコードを記述してください ↓↓↓
-    pass
+    results = []
+    for keyword, content in KNOWLEDGE_BASE.items():
+        if keyword.lower() in query.lower():
+            results.append({"keyword": keyword, "content": content})
+    if results:
+        return {"status": "found", "results": results}
+    return {"status": "not_found", "message": "該当情報がありません"}
 
 
 # エージェントの定義（完成済み）
 root_agent = LlmAgent(
-    model="gemini-2.0-flash",
-    name="memory_agent",
+    model="gemini-2.5-flash",
+    name="memory_rag_agent",
     instruction="""
     あなたは「AIエージェント入門」コースの専属アシスタントです。
 

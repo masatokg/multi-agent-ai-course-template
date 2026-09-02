@@ -33,7 +33,7 @@ load_dotenv(override=True)
 #
 # ■ 記述例:
 #   research_agent = LlmAgent(
-#       model="gemini-2.0-flash",
+#       model="gemini-2.5-flash",
 #       name="research_agent",
 #       instruction="""
 #       あなたはリサーチ専門のエージェントです。
@@ -53,7 +53,7 @@ research_agent = None  # ← LlmAgent(...) を記述して研究用エージェ�
 # サブエージェント【2】：執筆担当（完成済み）
 # ──────────────────────────────────────────────────────────────────────────────
 writer_agent = LlmAgent(
-    model="gemini-2.0-flash",
+    model="gemini-2.5-flash",
     name="writer_agent",
     instruction="""
     あなたはわかりやすい文章を書く専門のエージェントです。
@@ -92,7 +92,7 @@ writer_agent = LlmAgent(
 
 # ↓↓↓ ここに 【穴埋め【2】】 の sub_agents=[...] 引数を記述してください ↓↓↓
 root_agent = LlmAgent(
-    model="gemini-2.0-flash",
+    model="gemini-2.5-flash",
     name="orchestrator_agent",
     instruction="""
     あなたはレポート作成チームのリーダーです。
