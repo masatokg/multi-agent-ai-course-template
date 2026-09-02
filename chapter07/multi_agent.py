@@ -45,7 +45,7 @@ if hasattr(sys.stdout, "reconfigure"):
 #
 # ■ 記述例:
 #   analyzer = LlmAgent(
-#       model="gemini-3.6-flash",
+#       model="gemini-2.5-flash",
 #       name="data_analyzer",
 #       instruction="データの分析・集計を担当します。",
 #   )
@@ -53,21 +53,21 @@ if hasattr(sys.stdout, "reconfigure"):
 
 # ↓↓↓ ここに 【穴埋め【1】】 のコード（3つのサブエージェント）を記述してください ↓↓↓
 analysis_agent = LlmAgent(
-    model="gemini-3.6-flash",
+    model="gemini-2.5-flash",
     name="analysis_agent",
     description="現状の課題と問題点を特定する専門エージェント",
     instruction="あなたはデータ分析の専門家です。現状の整理と課題を出力してください。",
 )
 
 proposal_agent = LlmAgent(
-    model="gemini-3.6-flash",
+    model="gemini-2.5-flash",
     name="proposal_agent",
     description="分析結果に基づいた改善案を提示する専門エージェント",
     instruction="あなたは戦略コンサルタントです。分析結果に対して、具体的で実現可能な改善策を提案してください。",
 )
 
 summary_agent = LlmAgent(
-    model="gemini-3.6-flash",
+    model="gemini-2.5-flash",
     name="summary_agent",
     description="経営陣向けの最終レポートを作成する専門エージェント",
     instruction="あなたは編集者です。分析結果と改善策を統合し、経営陣に提示する簡潔で説得力のあるレポートを作成してください。",
@@ -87,7 +87,7 @@ summary_agent = LlmAgent(
 # ──────────────────────────────────────────────────────────────────────────────
 
 root_agent = LlmAgent(
-    model="gemini-3.6-flash",
+    model="gemini-2.5-flash",
     name="coordinator_agent",
     instruction="""
     あなたはマルチエージェントチームのコーディネーター（指揮者）です。

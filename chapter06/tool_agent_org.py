@@ -171,7 +171,7 @@ def run_python_code(code: str) -> dict:
 # エージェントの定義（複数ツールを統合）
 # ──────────────────────────────────────────────────────────────────────────────
 root_agent = LlmAgent(
-    model="gemini-3.6-flash",
+    model="gemini-2.5-flash",
     name="mcp_simulated_agent",
     instruction="""
     あなたはファイル操作とコード実行ができるアシスタントです。

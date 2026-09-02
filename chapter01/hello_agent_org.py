@@ -59,7 +59,7 @@ if hasattr(sys.stdout, "reconfigure"):
 # │【教科書との差分【2】】エージェントのクラス名・モデル名・変数名
 # │
 # │【本ファイル（実行用）】
-# │  root_agent = LlmAgent(model="gemini-3.6-flash", ...)
+# │  root_agent = LlmAgent(model="gemini-2.5-flash", ...)
 # │
 # │【教科書のサンプルコード（イメージ）】
 # #  agent = Agent(model="gemini-pro", ...)
@@ -67,13 +67,13 @@ if hasattr(sys.stdout, "reconfigure"):
 # │【補足説明】
 # │  - クラス名 : 教科書では "Agent" と表記されることがありますが、
 # │    ADK の正式クラス名は "LlmAgent" です。
-# │  - モデル名 : 本ファイルでは "gemini-3.6-flash" を標準使用します。
+# │  - モデル名 : 本ファイルでは "gemini-2.5-flash" を標準使用します。
 # │    ※万が一503エラー（サーバー高負荷）が出た場合は "gemini-3.5-flash" や "gemini-3.7-flash" に変更してください。
 # │  - 変数名  : 教科書では "agent" ですが、マルチエージェント構成での
 # │    一貫性のため "root_agent" という名前にしています。
 # └─────────────────────────────────────────────────────────────────────────────
 root_agent = LlmAgent(
-    model="gemini-3.6-flash",
+    model="gemini-2.5-flash",
     name="hello_agent",
     instruction="""
     あなたは「AIエージェント入門」授業のアシスタントです。

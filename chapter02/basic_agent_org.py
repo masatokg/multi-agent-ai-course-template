@@ -146,7 +146,7 @@ def get_weather(city: str) -> dict:
 # │  AIがより適切にツールを選択できるようになります。
 # └─────────────────────────────────────────────────────────────────────────────
 root_agent = LlmAgent(
-    model="gemini-3.6-flash",
+    model="gemini-2.5-flash",
     name="tool_demo_agent",
     instruction="""
     あなたは計算と天気情報の取得ができるアシスタントです。

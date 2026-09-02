@@ -60,7 +60,7 @@ if hasattr(sys.stdout, "reconfigure"):
 # │  実際の動作の安定性のために追加しています。
 # └─────────────────────────────────────────────────────────────────────────────
 research_agent = LlmAgent(
-    model="gemini-3.6-flash",
+    model="gemini-2.5-flash",
     name="research_agent",
     instruction="""
     あなたはリサーチ専門のエージェントです。
@@ -83,7 +83,7 @@ research_agent = LlmAgent(
 # サブエージェント【2】：執筆担当
 # ──────────────────────────────────────────────────────────────────────────────
 writer_agent = LlmAgent(
-    model="gemini-3.6-flash",
+    model="gemini-2.5-flash",
     name="writer_agent",
     instruction="""
     あなたはわかりやすい文章を書く専門のエージェントです。
@@ -127,7 +127,7 @@ writer_agent = LlmAgent(
 # │  （より柔軟ですが、SequentialAgent より動作が「AIの判断依存」になります）。
 # └─────────────────────────────────────────────────────────────────────────────
 root_agent = LlmAgent(
-    model="gemini-3.6-flash",
+    model="gemini-2.5-flash",
     name="orchestrator_agent",
     instruction="""
     あなたはレポート作成チームのリーダーです。

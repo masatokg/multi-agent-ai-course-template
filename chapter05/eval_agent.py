@@ -138,7 +138,7 @@ def confirm_order(approved: bool) -> dict:
 
 # エージェントの定義（完成済み）
 root_agent = LlmAgent(
-    model="gemini-3.6-flash",
+    model="gemini-2.5-flash",
     name="evaluated_agent",
     instruction="""
     あなたは発注システムのアシスタントです。
