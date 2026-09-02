@@ -174,6 +174,7 @@ def main():
         print()
 
         # エージェントに送信して返答を受け取る（503エラー自動3回リトライ＆切り替え機能付き）
+        # エージェントに送信して返答を受け取る（503/429エラー自動対応機能付き）
         success = False
         max_retries = 3
         for attempt in range(1, max_retries + 1):
@@ -196,7 +197,34 @@ def main():
                 break
             except Exception as e:
                 err_str = str(e)
-                if "503" in err_str or "UNAVAILABLE" in err_str or "high demand" in err_str:
+                # ── 429エラー（利用制限オーバー）対応 ──────────────────
+                if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str or "Quota exceeded" in err_str:
+                    print("\n  🚨 【429エラー（利用制限上限到達 / Quota Exceeded）が発生しました】")
+                    print("  ご使用中のAPIキーのリクエスト制限（一日の上限）に達しました。")
+                    print("  Google AI Studio (https://aistudio.google.com/) で「新しいプロジェクト」を作成し、")
+                    print("  自分専用の代替APIキーを発行して以下に入力してください。\n")
+                    try:
+                        new_key = input("  🔑 新しい GOOGLE_API_KEY を入力してください: ").strip()
+                    except (KeyboardInterrupt, EOFError):
+                        break
+                    
+                    if len(new_key) > 15:
+                        os.environ["GOOGLE_API_KEY"] = new_key
+                        # .env にも保存
+                        try:
+                            with open(".env", "w", encoding="utf-8") as f:
+                                f.write(f"GOOGLE_API_KEY={new_key}\n")
+                        except Exception:
+                            pass
+                        print("  ✅ APIキーを更新しました！会話を自動的に再開します...\n")
+                        # そのままループで再試行
+                        continue
+                    else:
+                        print("  ❌ APIキーの形式が正しくありません。\n")
+                        break
+
+                # ── 503エラー（サーバー高負荷・混雑）対応 ────────────────
+                elif "503" in err_str or "UNAVAILABLE" in err_str or "high demand" in err_str:
                     print(f"\n  ⚠️ 503エラー検出（サーバー高負荷・混雑）。自動リトライ中... ({attempt}/{max_retries})")
                     if attempt < max_retries:
                         import time
