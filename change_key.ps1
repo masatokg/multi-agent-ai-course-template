@@ -25,12 +25,12 @@ if ([string]::IsNullOrWhiteSpace($NewApiKey)) {
     Write-Host "2. 「Create API key in new project」（新しいプロジェクトで作成）をクリック" -ForegroundColor Yellow
     Write-Host "3. 発行された新しいAPIキーをコピー" -ForegroundColor Yellow
     Write-Host ""
-    $NewApiKey = Read-Host "新しい GOOGLE_API_KEY（AIzaで始まる文字列）を入力"
+    $NewApiKey = Read-Host "新しい GOOGLE_API_KEY を入力"
     $NewApiKey = $NewApiKey.Trim()
 }
 
-if (-not ($NewApiKey.StartsWith("AIza") -and $NewApiKey.Length -gt 20)) {
-    Write-Host "❌ APIキーの形式が正しくありません。（'AIza' で始まる文字列を入力してください）" -ForegroundColor Red
+if (-not ($NewApiKey.Length -gt 15 -and $NewApiKey -notmatch "\s")) {
+    Write-Host "❌ APIキーの形式が正しくありません。（15文字以上かつ空白を含まないキーを入力してください）" -ForegroundColor Red
     exit 1
 }
 

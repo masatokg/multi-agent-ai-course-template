@@ -211,7 +211,7 @@ Write-Step "STEP 4: Google AI Studio API Key Setup"
 $existingKey = [System.Environment]::GetEnvironmentVariable("GOOGLE_API_KEY", "User")
 if (-not $existingKey) { $existingKey = $env:GOOGLE_API_KEY }
 
-if ($existingKey -and $existingKey.StartsWith("AIza")) {
+if ($existingKey -and $existingKey.Length -gt 15) {
     Write-Success "API Key is already configured."
 } else {
     if ($NonInteractive) {
@@ -223,13 +223,13 @@ if ($existingKey -and $existingKey.StartsWith("AIza")) {
 
         $apiKey = ""
         while ($true) {
-            $apiKey = Read-Host "Enter your GOOGLE_API_KEY (starts with AIza)"
+            $apiKey = Read-Host "Enter your GOOGLE_API_KEY"
             $apiKey = $apiKey.Trim()
 
-            if ($apiKey.StartsWith("AIza") -and $apiKey.Length -gt 20) {
+            if ($apiKey.Length -gt 15 -and $apiKey -notmatch "\s") {
                 break
             } else {
-                Write-Err "Invalid API Key format."
+                Write-Err "Invalid API Key format (Must be at least 15 characters without spaces)."
             }
         }
 

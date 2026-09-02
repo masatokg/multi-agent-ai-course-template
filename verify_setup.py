@@ -111,8 +111,8 @@ def main():
 
     # ── APIキー確認 ───────────────────────────────────────────────────
     print("【APIキー】")
-    api_key = os.environ.get("GOOGLE_API_KEY", "")
-    has_key = bool(api_key and api_key.startswith("AIza"))
+    api_key = os.environ.get("GOOGLE_API_KEY", "").strip()
+    has_key = bool(len(api_key) > 15)
 
     if has_key:
         masked = api_key[:8] + "..." + api_key[-4:]

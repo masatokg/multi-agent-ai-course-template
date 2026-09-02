@@ -57,7 +57,7 @@ def main():
     print()
 
     api_key = os.environ.get("GOOGLE_API_KEY", "")
-    if not api_key.startswith("AIza"):
+    if len(api_key) <= 15:
         print("  ❌ GOOGLE_API_KEY が設定されていません。")
         print("  setup.ps1 を実行してAPIキーを設定してください。")
         return
