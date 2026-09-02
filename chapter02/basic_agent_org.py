@@ -195,7 +195,7 @@ def main():
         agent=root_agent,
         app_name="basic_agent_app",
     )
-    session = runner.runner.session_service.create_session_sync(
+    session = runner.session_service.create_session_sync(
         app_name="basic_agent_app",
         user_id="student_001",
     )
