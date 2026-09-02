@@ -27,7 +27,7 @@ load_dotenv(override=True)
 #   LlmAgent() を呼び出し、変数 `root_agent` に代入してください。
 #
 # ■ 設定する引数:
-#   - model       : "gemini-3.6-flash" (使用するAIモデル。503エラーが出た場合は "gemini-3.5-flash" や "gemini-1.5-flash" を使用)
+#   - model       : "gemini-3.6-flash" (使用するAIモデル。503エラーが出た場合は "gemini-3.5-flash" や "gemini-3.7-flash" を使用)
 #   - name        : "hello_agent" (エージェントの識別名)
 #   - instruction : エージェントへの指示文（「あなたは〜です。〜答えてください。」など）
 #
