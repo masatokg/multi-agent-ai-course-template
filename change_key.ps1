@@ -4,7 +4,7 @@
     Google APIキー（代替キー・臨時キー）緊急切り替えスクリプト
 
 .DESCRIPTION
-    429エラー（レートリミット超過）発生時に、臨時キーに即座に差し替えます。
+    429エラー（レートリミット超過）発生時に、学生自身が別プロジェクトで作成した新キーに即座に差し替えます。
 #>
 
 param(
@@ -20,7 +20,10 @@ Write-Host "==================================================" -ForegroundColor
 Write-Host ""
 
 if ([string]::IsNullOrWhiteSpace($NewApiKey)) {
-    Write-Host "429エラー（利用制限）が発生した場合は、臨時キーを入力してください。" -ForegroundColor Yellow
+    Write-Host "【429エラー（利用制限）が発生した場合の対処】" -ForegroundColor Yellow
+    Write-Host "1. https://aistudio.google.com/ を開く" -ForegroundColor Yellow
+    Write-Host "2. 「Create API key in new project」（新しいプロジェクトで作成）をクリック" -ForegroundColor Yellow
+    Write-Host "3. 発行された新しいAPIキーをコピー" -ForegroundColor Yellow
     Write-Host ""
     $NewApiKey = Read-Host "新しい GOOGLE_API_KEY（AIzaで始まる文字列）を入力"
     $NewApiKey = $NewApiKey.Trim()

@@ -161,13 +161,18 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
 ### Q. 🚨 429エラー（Too Many Requests / 1分・1日の利用制限）が発生した
-**A.** Gemini APIの無料枠制限（429エラー / Resource Exhausted）にかかった場合は、講師から配布された**代替の臨時APIキー**に速やかに切り替えてください。
+**A.** Gemini APIの無料枠制限（429エラー / Resource Exhausted）にかかった場合は、**Google AI Studio で「新しいプロジェクト」を作成し、自分専用の代替APIキーを発行**してください。
 
-VS Code のターミナルで以下のコマンドを実行するだけで、5秒で代替キーに切り替わります：
+#### 代替キーの発行と切り替え手順：
+1. ブラウザで [https://aistudio.google.com/](https://aistudio.google.com/) を開きます。
+2. 左メニュー「Get API key」➔ **「Create API key in new project」**（新しいプロジェクトでキーを作成）をクリックします。
+3. 発行された新しいキー（`AIza...`）をコピーします。
+4. VS Code のターミナルで以下のコマンドを実行し、コピーしたキーを入力します：
 ```powershell
 .\change_key.ps1
 ```
-画面の指示に従って新しいAPIキー（`AIza...`）を入力すれば、すぐにプログラムの実行を再開できます。
+これで 5秒で新しいキーに切り替わり、すぐに演習を再開できます。
+
 
 ---
 
