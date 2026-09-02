@@ -142,7 +142,8 @@ def main():
     #   - user_id: "student_001"
     #
     # ■ 記述例:
-    #   session = runner.session_service.create_session_sync(
+    #   # 💡 ポイント (google-adk 2.8.0+): runner 内部の session_service からセッションを発行します
+    session = runner.session_service.create_session_sync(
     #       app_name="memory_agent_app",
     #       user_id="student_001",
     #   )
@@ -151,6 +152,10 @@ def main():
     # ↓↓↓ ここに 【穴埋め【2】】 のコードを記述してください ↓↓↓
     session = None  # ← create_session(...) の戻り値を代入してください
 
+    # 💡 【重要：google-adk 2.8.0以降のセッション管理仕様】
+# 最新の google-adk では Runner（司令塔）が内部で専用の session_service を管理します。
+# `runner.session_service.create_session_sync(...)` からセッションを発行することで
+# 会話履歴の不一致や Session not found エラーを防止します。
     runner = InProcessRunner(
         agent=root_agent,
         app_name="memory_agent_app",

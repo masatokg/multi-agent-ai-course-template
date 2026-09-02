@@ -125,7 +125,11 @@ def main():
     # │
     # │【本ファイル（実行用）】
     # │      # │  session = runner.session_service.create_session_sync(...)
-    # │  runner = InProcessRunner(agent=root_agent, ...)
+    # │  # 💡 【重要：google-adk 2.8.0以降のセッション管理仕様】
+# 最新の google-adk では Runner（司令塔）が内部で専用の session_service を管理します。
+# `runner.session_service.create_session_sync(...)` からセッションを発行することで
+# 会話履歴の不一致や Session not found エラーを防止します。
+    runner = InProcessRunner(agent=root_agent, ...)
     # │
     # │【教科書のサンプルコード（イメージ）】
     # #  response = agent.run("こんにちは")   # 簡略1行版
@@ -144,6 +148,10 @@ def main():
     )
 
     # ランナーの初期化（エージェントを実際に動かす仕組み）
+    # 💡 【重要：google-adk 2.8.0以降のセッション管理仕様】
+# 最新の google-adk では Runner（司令塔）が内部で専用の session_service を管理します。
+# `runner.session_service.create_session_sync(...)` からセッションを発行することで
+# 会話履歴の不一致や Session not found エラーを防止します。
     runner = InProcessRunner(
         agent=root_agent,
         app_name="hello_agent_app",

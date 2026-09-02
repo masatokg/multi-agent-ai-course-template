@@ -143,6 +143,10 @@ def main():
         print("  ❌ GOOGLE_API_KEY が設定されていません。")
         return
 
+    # 💡 【重要：google-adk 2.8.0以降のセッション管理仕様】
+# 最新の google-adk では Runner（司令塔）が内部で専用の session_service を管理します。
+# `runner.session_service.create_session_sync(...)` からセッションを発行することで
+# 会話履歴の不一致や Session not found エラーを防止します。
     runner = InProcessRunner(
         agent=root_agent,
         app_name="context_agent_app",
