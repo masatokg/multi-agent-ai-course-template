@@ -13,6 +13,55 @@ if hasattr(sys.stdout, "reconfigure"):
     except Exception:
         pass
 
+from dotenv import load_dotenv
+from google.adk.agents import LlmAgent
+from google.adk.tools import FunctionTool
+try:
+    from google.adk.runners import InMemoryRunner as InProcessRunner
+except ImportError:
+    try:
+        from google.adk.runners import Runner as InProcessRunner
+    except ImportError:
+        from google.adk.runners import InProcessRunner
+from google.genai import types
+
+load_dotenv(override=True)
+
+
+os.environ["PYTHONWARNINGS"] = "ignore"
+warnings.simplefilter("ignore")
+logging.disable(logging.CRITICAL)
+
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
+from dotenv import load_dotenv
+from google.adk.agents import LlmAgent
+try:
+    from google.adk.runners import InMemoryRunner as InProcessRunner
+except ImportError:
+    try:
+        from google.adk.runners import Runner as InProcessRunner
+    except ImportError:
+        from google.adk.runners import InProcessRunner
+from google.genai import types
+
+load_dotenv(override=True)
+
+
+os.environ["PYTHONWARNINGS"] = "ignore"
+warnings.simplefilter("ignore")
+logging.disable(logging.CRITICAL)
+
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
 
 
 # エージェントに送信して返答を受け取る（503エラー自動3回リトライ＆切り替え機能付き）
