@@ -1,4 +1,4 @@
-﻿"""
+"""
 tool_agent.py - 第6章 MCP & ツール統合
 
 MCPライクなツール統合の例です。
@@ -38,11 +38,14 @@ from pathlib import Path
 # │  シミュレーションしています。
 # │  実際のMCPサーバーを使う場合は教科書の MCPToolset の例を参照してください。
 # └─────────────────────────────────────────────────────────────────────────────
+from dotenv import load_dotenv
 from google.adk.agents import LlmAgent
 from google.adk.runners import InProcessRunner
 from google.adk.sessions import InMemorySessionService
 from google.adk.tools import FunctionTool
 from google.genai import types
+
+load_dotenv(override=True)
 
 
 # ──────────────────────────────────────────────────────────────────────────────

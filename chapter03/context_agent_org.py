@@ -1,4 +1,4 @@
-﻿"""
+"""
 context_agent.py - 第3章 Context Engineering & Agent Skills
 
 プロンプト設計とサブエージェントの例です。
@@ -8,10 +8,14 @@ context_agent.py - 第3章 Context Engineering & Agent Skills
 """
 
 import os
+import os
+from dotenv import load_dotenv
 from google.adk.agents import LlmAgent
 from google.adk.runners import InProcessRunner
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
+
+load_dotenv(override=True)
 
 
 # ──────────────────────────────────────────────────────────────────────────────

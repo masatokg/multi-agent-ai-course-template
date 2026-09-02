@@ -160,6 +160,16 @@ python hello_agent_org.py
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
+### Q. 🚨 429エラー（Too Many Requests / 1分・1日の利用制限）が発生した
+**A.** Gemini APIの無料枠制限（429エラー / Resource Exhausted）にかかった場合は、講師から配布された**代替の臨時APIキー**に速やかに切り替えてください。
+
+VS Code のターミナルで以下のコマンドを実行するだけで、5秒で代替キーに切り替わります：
+```powershell
+.\change_key.ps1
+```
+画面の指示に従って新しいAPIキー（`AIza...`）を入力すれば、すぐにプログラムの実行を再開できます。
+
 ---
 
 *このガイドは授業用に作成されました。*
+

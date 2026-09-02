@@ -1,4 +1,4 @@
-﻿"""
+"""
 hello_agent.py - 第1章 最初のAIエージェント
 
 このスクリプトは、Google ADKを使った最初のAIエージェントの例です。
@@ -29,10 +29,14 @@ import os
 # │  - InMemorySessionService: 会話履歴をメモリ上に保持するクラス
 # │  - types                 : メッセージ形式（Content/Part）を定義するモジュール
 # └─────────────────────────────────────────────────────────────────────────────
+import os
+from dotenv import load_dotenv
 from google.adk.agents import LlmAgent
 from google.adk.runners import InProcessRunner
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
+
+load_dotenv(override=True)
 
 
 # ──────────────────────────────────────────────────────────────────────────────

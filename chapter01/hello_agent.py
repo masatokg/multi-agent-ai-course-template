@@ -8,10 +8,13 @@ hello_agent.py - 第1章 最初のAIエージェント（演習用穴埋めコ�
 """
 
 import os
+from dotenv import load_dotenv
 from google.adk.agents import LlmAgent
 from google.adk.runners import InProcessRunner
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
+
+load_dotenv(override=True)
 
 
 # ──────────────────────────────────────────────────────────────────────────────

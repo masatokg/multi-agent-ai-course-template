@@ -8,10 +8,13 @@ multi_agent.py - 第7章 A2A：マルチエージェントシステム（演習�
 """
 
 import os
+from dotenv import load_dotenv
 from google.adk.agents import LlmAgent
 from google.adk.runners import InProcessRunner
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
+
+load_dotenv(override=True)
 
 
 # ──────────────────────────────────────────────────────────────────────────────

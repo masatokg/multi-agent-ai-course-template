@@ -1,4 +1,4 @@
-﻿"""
+"""
 memory_agent.py - 第4章 Session・Memory・RAG
 
 会話履歴を記憶するエージェントと、簡易RAGの例です。
@@ -8,10 +8,13 @@ memory_agent.py - 第4章 Session・Memory・RAG
 """
 
 import os
+from dotenv import load_dotenv
 from google.adk.agents import LlmAgent
 from google.adk.runners import InProcessRunner
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
+
+load_dotenv(override=True)
 
 
 # ──────────────────────────────────────────────────────────────────────────────

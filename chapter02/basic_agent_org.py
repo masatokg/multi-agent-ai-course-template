@@ -1,4 +1,4 @@
-﻿"""
+"""
 basic_agent.py - 第2章 ツール付きエージェント
 
 エージェントに「計算ツール」と「天気取得ツール（ダミー）」を持たせた例です。
@@ -26,11 +26,15 @@ import os
 # │  【2】 @tool デコレータを関数に付ける方法（教科書で紹介される場合あり）
 # │  どちらも動作は同じで、AIがツールを「使える道具」として認識します。
 # └─────────────────────────────────────────────────────────────────────────────
+import os
+from dotenv import load_dotenv
 from google.adk.agents import LlmAgent
 from google.adk.runners import InProcessRunner
 from google.adk.sessions import InMemorySessionService
 from google.adk.tools import FunctionTool
 from google.genai import types
+
+load_dotenv(override=True)
 
 
 # ──────────────────────────────────────────────────────────────────────────────
