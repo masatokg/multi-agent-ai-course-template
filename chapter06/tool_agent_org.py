@@ -1,3 +1,12 @@
+import os
+import sys
+import warnings
+import logging
+
+os.environ["PYTHONWARNINGS"] = "ignore"
+warnings.simplefilter("ignore")
+logging.disable(logging.WARNING)
+
 import warnings
 warnings.filterwarnings("ignore")
 """
