@@ -5,54 +5,8 @@ import logging
 
 os.environ["PYTHONWARNINGS"] = "ignore"
 warnings.simplefilter("ignore")
-logging.disable(logging.WARNING)
+logging.disable(logging.CRITICAL)
 
-import warnings
-warnings.filterwarnings("ignore")
-"""
-basic_agent.py - 第2章 ツール付きエージェント
-
-エージェントに「計算ツール」と「天気取得ツール（ダミー）」を持たせた例です。
-ツール（Tool）を使うことで、エージェントの能力を拡張できます。
-
-実行方法: python basic_agent.py
-"""
-
-import os
-# ┌─────────────────────────────────────────────────────────────────────────────
-# │【教科書との差分【1】】インポート：FunctionTool の使い方
-# │
-# │【本ファイル（実行用）】
-# │  from google.adk.tools import FunctionTool
-# │  # Python 関数を FunctionTool でラップしてエージェントに渡す
-# │
-# │【教科書のサンプルコード（イメージ）】
-# #  from google.adk.tools import tool   # デコレータ形式の場合
-# #  @tool
-# #  def calculate(expression: str) -> dict: ...
-# │
-# │【補足説明】
-# │  ADK でツールを定義する方法は主に2種類あります：
-# │  【1】 FunctionTool(func=関数) でラップする方法（本ファイルの方法）
-# │  【2】 @tool デコレータを関数に付ける方法（教科書で紹介される場合あり）
-# │  どちらも動作は同じで、AIがツールを「使える道具」として認識します。
-# └─────────────────────────────────────────────────────────────────────────────
-import os
-from dotenv import load_dotenv
-from google.adk.agents import LlmAgent
-try:
-    from google.adk.runners import InMemoryRunner as InProcessRunner
-except ImportError:
-    try:
-        from google.adk.runners import Runner as InProcessRunner
-    except ImportError:
-        from google.adk.runners import InProcessRunner
-from google.adk.tools import FunctionTool
-from google.genai import types
-
-load_dotenv(override=True)
-
-import sys
 if hasattr(sys.stdout, "reconfigure"):
     try:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -228,26 +182,20 @@ def main():
         # エージェントに送信して返答を受け取る（503エラー自動3回リトライ＆切り替え機能付き）
         # エージェントに送信して返答を受け取る（503/429エラー自動対応機能付き）
         # エージェントに送信して返答を受け取る（503/429エラー自動対応＆スタックトレース非表示機能付き）
+        # エージェントに送信して返答を受け取る（リアルタイム・ストリーミング出力 & 429/503エラー対応）
         success = False
         max_retries = 3
         for attempt in range(1, max_retries + 1):
             try:
                 print("AI> ", end="", flush=True)
-                
-                # ADK内部の生のTraceback出力を一時遮断
-                import io, sys, contextlib
-                stderr_buffer = io.StringIO()
-                with contextlib.redirect_stderr(stderr_buffer):
-                    events = list(runner.run(
-                        user_id="student_001",
-                        session_id=session.id,
-                        new_message=types.Content(
-                            role="user",
-                            parts=[types.Part(text=user_input)],
-                        ),
-                    ))
-                
-                for event in events:
+                for event in runner.run(
+                    user_id="student_001",
+                    session_id=session.id,
+                    new_message=types.Content(
+                        role="user",
+                        parts=[types.Part(text=user_input)],
+                    ),
+                ):
                     if event.content and event.content.parts:
                         for part in event.content.parts:
                             if hasattr(part, "text") and part.text:
@@ -270,7 +218,6 @@ def main():
                     
                     if len(new_key) > 15:
                         os.environ["GOOGLE_API_KEY"] = new_key
-                        # .env にも保存
                         try:
                             with open(".env", "w", encoding="utf-8") as f:
                                 f.write(f"GOOGLE_API_KEY={new_key}\n")

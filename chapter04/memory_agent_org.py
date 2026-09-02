@@ -5,34 +5,8 @@ import logging
 
 os.environ["PYTHONWARNINGS"] = "ignore"
 warnings.simplefilter("ignore")
-logging.disable(logging.WARNING)
+logging.disable(logging.CRITICAL)
 
-import warnings
-warnings.filterwarnings("ignore")
-"""
-memory_agent.py - 第4章 Session・Memory・RAG
-
-会話履歴を記憶するエージェントと、簡易RAGの例です。
-前の会話を覚えており、過去に話した内容を参照して答えます。
-
-実行方法: python memory_agent.py
-"""
-
-import os
-from dotenv import load_dotenv
-from google.adk.agents import LlmAgent
-try:
-    from google.adk.runners import InMemoryRunner as InProcessRunner
-except ImportError:
-    try:
-        from google.adk.runners import Runner as InProcessRunner
-    except ImportError:
-        from google.adk.runners import InProcessRunner
-from google.genai import types
-
-load_dotenv(override=True)
-
-import sys
 if hasattr(sys.stdout, "reconfigure"):
     try:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -203,26 +177,20 @@ def main():
         # エージェントに送信して返答を受け取る（503エラー自動3回リトライ＆切り替え機能付き）
         # エージェントに送信して返答を受け取る（503/429エラー自動対応機能付き）
         # エージェントに送信して返答を受け取る（503/429エラー自動対応＆スタックトレース非表示機能付き）
+        # エージェントに送信して返答を受け取る（リアルタイム・ストリーミング出力 & 429/503エラー対応）
         success = False
         max_retries = 3
         for attempt in range(1, max_retries + 1):
             try:
                 print("AI> ", end="", flush=True)
-                
-                # ADK内部の生のTraceback出力を一時遮断
-                import io, sys, contextlib
-                stderr_buffer = io.StringIO()
-                with contextlib.redirect_stderr(stderr_buffer):
-                    events = list(runner.run(
-                        user_id="student_001",
-                        session_id=session.id,
-                        new_message=types.Content(
-                            role="user",
-                            parts=[types.Part(text=user_input)],
-                        ),
-                    ))
-                
-                for event in events:
+                for event in runner.run(
+                    user_id="student_001",
+                    session_id=session.id,
+                    new_message=types.Content(
+                        role="user",
+                        parts=[types.Part(text=user_input)],
+                    ),
+                ):
                     if event.content and event.content.parts:
                         for part in event.content.parts:
                             if hasattr(part, "text") and part.text:
@@ -245,7 +213,6 @@ def main():
                     
                     if len(new_key) > 15:
                         os.environ["GOOGLE_API_KEY"] = new_key
-                        # .env にも保存
                         try:
                             with open(".env", "w", encoding="utf-8") as f:
                                 f.write(f"GOOGLE_API_KEY={new_key}\n")
