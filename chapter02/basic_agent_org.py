@@ -227,19 +227,27 @@ def main():
 
         # エージェントに送信して返答を受け取る（503エラー自動3回リトライ＆切り替え機能付き）
         # エージェントに送信して返答を受け取る（503/429エラー自動対応機能付き）
+        # エージェントに送信して返答を受け取る（503/429エラー自動対応＆スタックトレース非表示機能付き）
         success = False
         max_retries = 3
         for attempt in range(1, max_retries + 1):
             try:
                 print("AI> ", end="", flush=True)
-                for event in runner.run(
-                    user_id="student_001",
-                    session_id=session.id,
-                    new_message=types.Content(
-                        role="user",
-                        parts=[types.Part(text=user_input)],
-                    ),
-                ):
+                
+                # ADK内部の生のTraceback出力を一時遮断
+                import io, sys, contextlib
+                stderr_buffer = io.StringIO()
+                with contextlib.redirect_stderr(stderr_buffer):
+                    events = list(runner.run(
+                        user_id="student_001",
+                        session_id=session.id,
+                        new_message=types.Content(
+                            role="user",
+                            parts=[types.Part(text=user_input)],
+                        ),
+                    ))
+                
+                for event in events:
                     if event.content and event.content.parts:
                         for part in event.content.parts:
                             if hasattr(part, "text") and part.text:
@@ -269,7 +277,6 @@ def main():
                         except Exception:
                             pass
                         print("  ✅ APIキーを更新しました！会話を自動的に再開します...\n")
-                        # そのままループで再試行
                         continue
                     else:
                         print("  ❌ APIキーの形式が正しくありません。\n")
