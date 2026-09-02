@@ -34,7 +34,7 @@ if hasattr(sys.stdout, "reconfigure"):
 # サブエージェント【1】：データ分析担当
 # ──────────────────────────────────────────────────────────────────────────────
 analysis_agent = LlmAgent(
-    model="gemini-2.5-flash",
+    model="gemini-3.5-flash",
     name="analysis_agent",
     description="現状の課題と問題点を特定する専門エージェント",
     instruction="""
@@ -49,7 +49,7 @@ analysis_agent = LlmAgent(
 # サブエージェント【2】：改善提案担当
 # ──────────────────────────────────────────────────────────────────────────────
 proposal_agent = LlmAgent(
-    model="gemini-2.5-flash",
+    model="gemini-3.5-flash",
     name="proposal_agent",
     description="分析結果に基づいた具体的な解決策・改善案を提示する専門エージェント",
     instruction="""
@@ -64,7 +64,7 @@ proposal_agent = LlmAgent(
 # サブエージェント【3】：レポートまとめ担当
 # ──────────────────────────────────────────────────────────────────────────────
 summary_agent = LlmAgent(
-    model="gemini-2.5-flash",
+    model="gemini-3.5-flash",
     name="summary_agent",
     description="分析と提案を統合して、わかりやすいエグゼクティブサマリーを作成する専門エージェント",
     instruction="""
@@ -121,7 +121,7 @@ summary_agent = LlmAgent(
 # │  教科書の AgentTool や A2A SDK の章を参照してください。
 # └─────────────────────────────────────────────────────────────────────────────
 root_agent = LlmAgent(
-    model="gemini-2.5-flash",
+    model="gemini-3.5-flash",
     name="coordinator_agent",
     instruction="""
     あなたはマルチエージェントチームのコーディネーター（指揮者）です。
@@ -199,25 +199,62 @@ def main():
         print("     （少々お時間がかかります）")
         print()
 
-        try:
-            for event in runner.run(
-                user_id="student_001",
-                session_id=session.id,
-                new_message=types.Content(
-                    role="user",
-                    parts=[types.Part(text=f"「{user_input}」について、チームでレポートを作成してください。")],
-                ),
-            ):
-                if event.content and event.content.parts:
-                    for part in event.content.parts:
-                        if hasattr(part, "text") and part.text:
-                            print(part.text, end="", flush=True)
+        # エージェントに送信して返答を受け取る（503エラー自動3回リトライ＆切り替え機能付き）
+        success = False
+        max_retries = 3
+        for attempt in range(1, max_retries + 1):
+            try:
+                print("AI> ", end="", flush=True)
+                for event in runner.run(
+                    user_id="student_001",
+                    session_id=session.id,
+                    new_message=types.Content(
+                        role="user",
+                        parts=[types.Part(text=user_input)],
+                    ),
+                ):
+                    if event.content and event.content.parts:
+                        for part in event.content.parts:
+                            if hasattr(part, "text") and part.text:
+                                print(part.text, end="", flush=True)
+                print()  # 改行
+                success = True
+                break
+            except Exception as e:
+                err_str = str(e)
+                if "503" in err_str or "UNAVAILABLE" in err_str or "high demand" in err_str:
+                    print(f"\n  ⚠️ 503エラー検出（サーバー高負荷・混雑）。自動リトライ中... ({attempt}/{max_retries})")
+                    if attempt < max_retries:
+                        import time
+                        time.sleep(2)
+                        continue
+                    else:
+                        print("\n  🚨 【503エラー（サーバー高負荷・混雑）が発生しました】")
+                        target_agent = root_agent if 'root_agent' in locals() else (agent if 'agent' in locals() else None)
+                        curr_model = getattr(target_agent, 'model', 'gemini-3.5-flash') if target_agent else 'gemini-3.5-flash'
+                        print(f"  現在設定中のモデル [{curr_model}] は現在Google側でアクセスが集中しています。")
+                        print("  以下から代替モデルを選択してください：")
+                        print("    [1] gemini-2.5-flash （推奨・超高速・高安定）")
+                        print("    [2] gemini-3.7-flash （最新モデル）")
+                        print("    [3] 別のモデル名を手動入力")
+                        try:
+                            choice = input("  選択肢番号を入力してください (1/2/3): ").strip()
+                        except (KeyboardInterrupt, EOFError):
+                            break
+                        if choice == "2":
+                            new_model = "gemini-3.7-flash"
+                        elif choice == "3":
+                            new_model = input("  モデル名を入力: ").strip()
+                        else:
+                            new_model = "gemini-2.5-flash"
 
-            print()
-        except Exception as e:
-            print(f"\n  ❌ エラー: {e}")
-
-        print()
+                        if target_agent:
+                            target_agent.model = new_model
+                        print(f"  🔄 モデルを [{new_model}] に切り替えました。会話を再開します...\n")
+                else:
+                    print(f"\n  ❌ エラーが発生しました: {e}")
+                    print("  APIキーが正しいか確認してください。\n")
+                    break
 
 
 if __name__ == "__main__":

@@ -30,138 +30,62 @@ if hasattr(sys.stdout, "reconfigure"):
 
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# 【穴埋め【1】】AIエージェントの定義
-# ──────────────────────────────────────────────────────────────────────────────
-# ■ 学習の目的:
-#   Google ADKで最も基本となる「LlmAgent」を作成し、AIのモデル名や役割（プロンプト）を設定します。
-#
-# ■ 作業指示:
-#   LlmAgent() を呼び出し、変数 `root_agent` に代入してください。
-#
-# ■ 設定する引数:
-#   - model       : "gemini-2.5-flash" (使用するAIモデル。503エラーが出た場合は "gemini-3.5-flash" や "gemini-3.7-flash" を使用)
-#   - name        : "hello_agent" (エージェントの識別名)
-#   - instruction : エージェントへの指示文（「あなたは〜です。〜答えてください。」など）
-#
-# ■ コードの書き方イメージ:
-#   root_agent = LlmAgent(
-#       model="gemini-2.5-flash",
-#       name="hello_agent",
-#       instruction="ここに指示文を書く",
-#   )
-# ──────────────────────────────────────────────────────────────────────────────
+# エージェントに送信して返答を受け取る（503エラー自動3回リトライ＆切り替え機能付き）
+        success = False
+        max_retries = 3
+        for attempt in range(1, max_retries + 1):
+            try:
+                print("AI> ", end="", flush=True)
+                for event in runner.run(
+                    user_id="student_001",
+                    session_id=session.id,
+                    new_message=types.Content(
+                        role="user",
+                        parts=[types.Part(text=user_input)],
+                    ),
+                ):
+                    if event.content and event.content.parts:
+                        for part in event.content.parts:
+                            if hasattr(part, "text") and part.text:
+                                print(part.text, end="", flush=True)
+                print()  # 改行
+                success = True
+                break
+            except Exception as e:
+                err_str = str(e)
+                if "503" in err_str or "UNAVAILABLE" in err_str or "high demand" in err_str:
+                    print(f"\n  ⚠️ 503エラー検出（サーバー高負荷・混雑）。自動リトライ中... ({attempt}/{max_retries})")
+                    if attempt < max_retries:
+                        import time
+                        time.sleep(2)
+                        continue
+                    else:
+                        print("\n  🚨 【503エラー（サーバー高負荷・混雑）が発生しました】")
+                        target_agent = root_agent if 'root_agent' in locals() else (agent if 'agent' in locals() else None)
+                        curr_model = getattr(target_agent, 'model', 'gemini-3.5-flash') if target_agent else 'gemini-3.5-flash'
+                        print(f"  現在設定中のモデル [{curr_model}] は現在Google側でアクセスが集中しています。")
+                        print("  以下から代替モデルを選択してください：")
+                        print("    [1] gemini-2.5-flash （推奨・超高速・高安定）")
+                        print("    [2] gemini-3.7-flash （最新モデル）")
+                        print("    [3] 別のモデル名を手動入力")
+                        try:
+                            choice = input("  選択肢番号を入力してください (1/2/3): ").strip()
+                        except (KeyboardInterrupt, EOFError):
+                            break
+                        if choice == "2":
+                            new_model = "gemini-3.7-flash"
+                        elif choice == "3":
+                            new_model = input("  モデル名を入力: ").strip()
+                        else:
+                            new_model = "gemini-2.5-flash"
 
-# ↓↓↓ ここに 【穴埋め【1】】 のコードを記述してください ↓↓↓
-root_agent = None  # ← None を消して LlmAgent(...) を記述してください
-
-
-# ──────────────────────────────────────────────────────────────────────────────
-# メイン処理
-# ──────────────────────────────────────────────────────────────────────────────
-def main():
-    print()
-    print("=" * 60)
-    print("  🤖 第1章：最初のAIエージェント")
-    print("=" * 60)
-    print()
-    print("  AIエージェントに話しかけてみましょう！")
-    print("  「quit」または「exit」と入力すると終了します。")
-    print()
-
-    api_key = os.environ.get("GOOGLE_API_KEY", "")
-    if len(api_key) <= 15:
-        print("  ❌ GOOGLE_API_KEY が設定されていません。")
-        print("  setup.ps1 を実行してAPIキーを設定してください。")
-        return
-
-    # ──────────────────────────────────────────────────────────────────────────
-    # 【穴埋め【2】】実行エンジン（ランナー）の初期化
-    # ──────────────────────────────────────────────────────────────────────────
-    # ■ 学習の目的:
-    #   エージェントを実際に実行・統元する司令塔「InProcessRunner」を用意します。
-    #
-    # ■ 作業指示:
-    #   InProcessRunner(agent=root_agent, app_name="hello_agent_app") を作成し、
-    #   変数 `runner` に代入してください。
-    # ──────────────────────────────────────────────────────────────────────────
-
-    # ↓↓↓ ここに 【穴埋め【2】】 のコードを記述してください ↓↓↓
-    runner = None  # ← InProcessRunner(...) を記述してください
-
-    # ──────────────────────────────────────────────────────────────────────────
-    # 【穴埋め【3】】セッションの作成（会話ノートの初期化）
-    # ──────────────────────────────────────────────────────────────────────────
-    # ■ 学習の目的:
-    #   エージェントが会話文脈を記憶するための「セッション」を作成します。
-    #   💡 ポイント (google-adk 2.8.0+):
-    #   Runner 内部の `runner.session_service.create_session_sync(...)` から
-    #   セッションを発行することで、会話履歴の分離や Session not found エラーを防止します。
-    #
-    # ■ 作業指示:
-    #   runner.session_service.create_session_sync(...) を呼び出し、変数 `session` に代入します。
-    #   - app_name : "hello_agent_app"
-    #   - user_id  : "student_001"
-    # ──────────────────────────────────────────────────────────────────────────
-
-    # ↓↓↓ ここに 【穴埋め【3】】 のコードを記述してください ↓↓↓
-    session = None  # ← runner.session_service.create_session_sync(...) を記述
-
-    print("  ✅ エージェントの準備ができました！")
-    print()
-
-    # 会話ループ
-    while True:
-        try:
-            user_input = input("あなた> ").strip()
-        except (KeyboardInterrupt, EOFError):
-            break
-
-        if user_input.lower() in ("quit", "exit", "終了"):
-            print("  👋 終了します。お疲れさまでした！")
-            break
-
-        if not user_input:
-            continue
-
-        # ──────────────────────────────────────────────────────────────────────
-        # 【穴埋め【4】】エージェントへのメッセージ送信とレスポンス表示
-        # ──────────────────────────────────────────────────────────────────────
-        # ■ 学習の目的:
-        #   ユーザーの入力を `types.Content` に包んで `runner.run()` に渡し、
-        #   AIからの応答イベントを受け取って逐次表示（ストリーミング出力）します。
-        #
-        # ■ 作業指示:
-        #   1. `runner.run()` を呼び出して for ループでイベントを取り出します。
-        #   2. `event.content.parts` からテキストを取り出して `print(part.text, end="", flush=True)` で表示します。
-        #
-        # ■ runner.run(...) に渡す引数:
-        #   - user_id    : "student_001"
-        #   - session_id : session.id
-        #   - new_message: types.Content(role="user", parts=[types.Part(text=user_input)])
-        # ──────────────────────────────────────────────────────────────────────
-        print("AI> ", end="", flush=True)
-        try:
-            # ↓↓↓ ここに 【穴埋め【4】】 のコードを記述してください ↓↓↓
-            # 例:
-            # for event in runner.run(
-            #     user_id="student_001",
-            #     session_id=session.id,
-            #     new_message=types.Content(
-            #         role="user",
-            #         parts=[types.Part(text=user_input)],
-            #     ),
-            # ):
-            #     if event.content and event.content.parts:
-            #         for part in event.content.parts:
-            #             if hasattr(part, "text") and part.text:
-            #                 print(part.text, end="", flush=True)
-            pass
-
-            print()  # 改行
-        except Exception as e:
-            print(f"\n  ❌ エラーが発生しました: {e}")
-            print("  APIキーが正しいか確認してください。")
+                        if target_agent:
+                            target_agent.model = new_model
+                        print(f"  🔄 モデルを [{new_model}] に切り替えました。会話を再開します...\n")
+                else:
+                    print(f"\n  ❌ エラーが発生しました: {e}")
+                    print("  APIキーが正しいか確認してください。\n")
+                    break
 
         print()
 

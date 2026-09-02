@@ -59,7 +59,7 @@ if hasattr(sys.stdout, "reconfigure"):
 # │【教科書との差分【2】】エージェントのクラス名・モデル名・変数名
 # │
 # │【本ファイル（実行用）】
-# │  root_agent = LlmAgent(model="gemini-2.5-flash", ...)
+# │  root_agent = LlmAgent(model="gemini-3.5-flash", ...)
 # │
 # │【教科書のサンプルコード（イメージ）】
 # #  agent = Agent(model="gemini-pro", ...)
@@ -67,13 +67,13 @@ if hasattr(sys.stdout, "reconfigure"):
 # │【補足説明】
 # │  - クラス名 : 教科書では "Agent" と表記されることがありますが、
 # │    ADK の正式クラス名は "LlmAgent" です。
-# │  - モデル名 : 本ファイルでは "gemini-2.5-flash" を標準使用します。
+# │  - モデル名 : 本ファイルでは "gemini-3.5-flash" を標準使用します。
 # │    ※万が一503エラー（サーバー高負荷）が出た場合は "gemini-3.5-flash" や "gemini-3.7-flash" に変更してください。
 # │  - 変数名  : 教科書では "agent" ですが、マルチエージェント構成での
 # │    一貫性のため "root_agent" という名前にしています。
 # └─────────────────────────────────────────────────────────────────────────────
 root_agent = LlmAgent(
-    model="gemini-2.5-flash",
+    model="gemini-3.5-flash",
     name="hello_agent",
     instruction="""
     あなたは「AIエージェント入門」授業のアシスタントです。
@@ -189,28 +189,60 @@ def main():
         # │    （長い返答も少しずつ表示できる仕組み）
         # └─────────────────────────────────────────────────────────────────────
         # エージェントに送信して返答を受け取る
-        print("AI> ", end="", flush=True)
-        try:
-            for event in runner.run(
-                user_id="student_001",
-                session_id=session.id,
-                new_message=types.Content(
-                    role="user",
-                    parts=[types.Part(text=user_input)],
-                ),
-            ):
-                # テキスト応答を出力
-                if event.content and event.content.parts:
-                    for part in event.content.parts:
-                        if hasattr(part, "text") and part.text:
-                            print(part.text, end="", flush=True)
+        success = False
+        max_retries = 3
+        for attempt in range(1, max_retries + 1):
+            try:
+                print("AI> ", end="", flush=True)
+                for event in runner.run(
+                    user_id="student_001",
+                    session_id=session.id,
+                    new_message=types.Content(
+                        role="user",
+                        parts=[types.Part(text=user_input)],
+                    ),
+                ):
+                    # テキスト応答を出力
+                    if event.content and event.content.parts:
+                        for part in event.content.parts:
+                            if hasattr(part, "text") and part.text:
+                                print(part.text, end="", flush=True)
+                print()  # 改行
+                success = True
+                break
+            except Exception as e:
+                err_str = str(e)
+                if "503" in err_str or "UNAVAILABLE" in err_str or "high demand" in err_str:
+                    print(f"\n  ⚠️ 503エラー検出（サーバー高負荷・混雑）。自動リトライ中... ({attempt}/{max_retries})")
+                    if attempt < max_retries:
+                        import time
+                        time.sleep(2)
+                        continue
+                    else:
+                        print("\n  🚨 【503エラー（サーバー高負荷・混雑）が発生しました】")
+                        print(f"  現在設定中のモデル [{root_agent.model}] は現在Google側でアクセスが集中しています。")
+                        print("  以下から代替モデルを選択してください：")
+                        print("    [1] gemini-2.5-flash （推奨・超高速・高安定）")
+                        print("    [2] gemini-3.7-flash （最新モデル）")
+                        print("    [3] 別のモデル名を手動入力")
+                        try:
+                            choice = input("  選択肢番号を入力してください (1/2/3): ").strip()
+                        except (KeyboardInterrupt, EOFError):
+                            break
+                        if choice == "2":
+                            new_model = "gemini-3.7-flash"
+                        elif choice == "3":
+                            new_model = input("  モデル名を入力: ").strip()
+                        else:
+                            new_model = "gemini-2.5-flash"
 
-            print()  # 改行
-        except Exception as e:
-            print(f"\n  ❌ エラーが発生しました: {e}")
-            print("  APIキーが正しいか確認してください。")
-
-        print()
+                        root_agent.model = new_model
+                        print(f"  🔄 モデルを [{new_model}] に切り替えました。会話を再開します...\n")
+                else:
+                    print(f"\n  ❌ エラーが発生しました: {e}")
+                    print("  APIキーが正しいか確認してください。")
+                    print()
+                    break
 
 
 if __name__ == "__main__":
