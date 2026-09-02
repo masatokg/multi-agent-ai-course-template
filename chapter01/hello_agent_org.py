@@ -44,6 +44,14 @@ from google.genai import types
 
 load_dotenv(override=True)
 
+import sys
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
+
 
 # ──────────────────────────────────────────────────────────────────────────────
 # エージェントの定義
@@ -119,7 +127,7 @@ def main():
     # │
     # │【本ファイル（実行用）】
     # │  session_service = InMemorySessionService()
-    # │  session = session_service.create_session(...)
+    # │  session = session_service.create_session_sync(...)
     # │  runner = InProcessRunner(agent=root_agent, ...)
     # │
     # │【教科書のサンプルコード（イメージ）】
@@ -134,7 +142,7 @@ def main():
     # └─────────────────────────────────────────────────────────────────────────
     # セッションサービスの初期化（エージェントの「記憶」を管理）
     session_service = InMemorySessionService()
-    session = session_service.create_session(
+    session = session_service.create_session_sync(
         app_name="hello_agent_app",
         user_id="student_001",
     )
@@ -143,7 +151,7 @@ def main():
     runner = InProcessRunner(
         agent=root_agent,
         app_name="hello_agent_app",
-        session_service=session_service,
+        
     )
 
     print("  ✅ エージェントの準備ができました！")

@@ -22,6 +22,14 @@ from google.genai import types
 
 load_dotenv(override=True)
 
+import sys
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
+
 
 # ──────────────────────────────────────────────────────────────────────────────
 # 簡易ナレッジベース（RAGのシミュレーション）
@@ -124,7 +132,7 @@ def main():
     # │
     # │【本ファイル（実行用）】
     # │  # 同じ session_id を使い続けることで会話履歴が自動的に保持される
-    # │  session = session_service.create_session(app_name=..., user_id=...)
+    # │  session = session_service.create_session_sync(app_name=..., user_id=...)
     # │  runner.run(session_id=session.id, ...)   # 毎回同じ session.id を渡す
     # │
     # │【教科書のサンプルコード（イメージ）】
@@ -151,7 +159,7 @@ def main():
         return
 
     session_service = InMemorySessionService()
-    session = session_service.create_session(
+    session = session_service.create_session_sync(
         app_name="memory_agent_app",
         user_id="student_001",
     )
@@ -159,7 +167,7 @@ def main():
     runner = InProcessRunner(
         agent=root_agent,
         app_name="memory_agent_app",
-        session_service=session_service,
+        
     )
 
     print("  ✅ エージェントの準備ができました！")

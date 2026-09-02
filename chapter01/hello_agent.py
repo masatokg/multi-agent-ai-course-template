@@ -22,6 +22,14 @@ from google.genai import types
 
 load_dotenv(override=True)
 
+import sys
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
+
 
 # ──────────────────────────────────────────────────────────────────────────────
 # 【穴埋め【1】】AIエージェントの定義
@@ -76,7 +84,7 @@ def main():
     #
     # ■ 作業指示:
     #   1. `session_service = InMemorySessionService()` を作成します。
-    #   2. `session = session_service.create_session(...)` を呼び出してセッションを発行します。
+    #   2. `session = session_service.create_session_sync(...)` を呼び出してセッションを発行します。
     #
     # ■ create_session の引数:
     #   - app_name : "hello_agent_app"
@@ -85,7 +93,7 @@ def main():
 
     # ↓↓↓ ここに 【穴埋め【2】】 のコードを記述してください ↓↓↓
     session_service = None  # ← InMemorySessionService() のインスタンスを作成
-    session = None          # ← session_service.create_session(app_name="hello_agent_app", user_id="student_001") を記述
+    session = None          # ← session_service.create_session_sync(app_name="hello_agent_app", user_id="student_001") を記述
 
     # ──────────────────────────────────────────────────────────────────────────
     # 【穴埋め【3】】実行エンジン（ランナー）の初期化

@@ -22,6 +22,14 @@ from google.genai import types
 
 load_dotenv(override=True)
 
+import sys
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
+
 
 # ──────────────────────────────────────────────────────────────────────────────
 # 【穴埋め【1】】3つの専門サブエージェントの作成
@@ -121,7 +129,7 @@ def main():
         return
 
     session_service = InMemorySessionService()
-    session = session_service.create_session(
+    session = session_service.create_session_sync(
         app_name="multi_agent_app",
         user_id="student_001",
     )
@@ -129,7 +137,7 @@ def main():
     runner = InProcessRunner(
         agent=root_agent,
         app_name="multi_agent_app",
-        session_service=session_service,
+        
     )
 
     print("  ✅ マルチエージェントチームの準備ができました！")

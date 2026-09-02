@@ -24,6 +24,14 @@ from google.genai import types
 
 load_dotenv(override=True)
 
+import sys
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
+
 
 # ──────────────────────────────────────────────────────────────────────────────
 # 簡易ナレッジベース（RAGのシミュレーション）
@@ -131,12 +139,12 @@ def main():
     #   毎回の対話で同一の `session_id` を使い続けることで、AIに過去の会話履歴（文脈）を保持させます。
     #
     # ■ 作業指示:
-    #   `session_service.create_session(...)` を呼び出して `session` 変数に保存してください。
+    #   `session_service.create_session_sync(...)` を呼び出して `session` 変数に保存してください。
     #   - app_name: "memory_agent_app"
     #   - user_id: "student_001"
     #
     # ■ 記述例:
-    #   session = session_service.create_session(
+    #   session = session_service.create_session_sync(
     #       app_name="memory_agent_app",
     #       user_id="student_001",
     #   )
@@ -148,7 +156,7 @@ def main():
     runner = InProcessRunner(
         agent=root_agent,
         app_name="memory_agent_app",
-        session_service=session_service,
+        
     )
 
     print("  ✅ エージェントの準備ができました！")
