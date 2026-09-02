@@ -27,7 +27,7 @@ load_dotenv(override=True)
 # │
 # │【本ファイル（実行用）】
 # │  research_agent = LlmAgent(
-# │      model="gemini-2.0-flash",
+# │      model="gemini-3.5-flash",
 # │      name="research_agent",
 # │      description="...",   ← sub_agentsで使う場合は description が重要
 # │      instruction="...",
@@ -47,7 +47,7 @@ load_dotenv(override=True)
 # │  実際の動作の安定性のために追加しています。
 # └─────────────────────────────────────────────────────────────────────────────
 research_agent = LlmAgent(
-    model="gemini-2.5-flash",
+    model="gemini-3.6-flash",
     name="research_agent",
     instruction="""
     あなたはリサーチ専門のエージェントです。
@@ -70,7 +70,7 @@ research_agent = LlmAgent(
 # サブエージェント【2】：執筆担当
 # ──────────────────────────────────────────────────────────────────────────────
 writer_agent = LlmAgent(
-    model="gemini-2.5-flash",
+    model="gemini-3.6-flash",
     name="writer_agent",
     instruction="""
     あなたはわかりやすい文章を書く専門のエージェントです。
@@ -114,7 +114,7 @@ writer_agent = LlmAgent(
 # │  （より柔軟ですが、SequentialAgent より動作が「AIの判断依存」になります）。
 # └─────────────────────────────────────────────────────────────────────────────
 root_agent = LlmAgent(
-    model="gemini-2.5-flash",
+    model="gemini-3.6-flash",
     name="orchestrator_agent",
     instruction="""
     あなたはレポート作成チームのリーダーです。

@@ -76,7 +76,7 @@ def search_knowledge(query: str) -> dict:
 
 # エージェントの定義（完成済み）
 root_agent = LlmAgent(
-    model="gemini-2.5-flash",
+    model="gemini-3.6-flash",
     name="memory_rag_agent",
     instruction="""
     あなたは「AIエージェント入門」コースの専属アシスタントです。

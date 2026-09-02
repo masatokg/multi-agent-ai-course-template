@@ -179,10 +179,10 @@ Pythonコード内のモデル名を、別の利用可能なモデルに一時�
 
 ```python
 # 変更前（デフォルト）
-root_agent = LlmAgent(model="gemini-2.5-flash", ...)
+root_agent = LlmAgent(model="gemini-3.6-flash", ...)
 
 # 変更例（503エラー回避用モデル）
-root_agent = LlmAgent(model="gemini-2.0-flash", ...)  # または "gemini-1.5-flash"
+root_agent = LlmAgent(model="gemini-3.5-flash", ...)  # または "gemini-1.5-flash"
 ```
 モデル名を変更して保存し、再度 `python xxxx_agent.py` を実行してください。
 

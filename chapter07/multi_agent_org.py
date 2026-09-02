@@ -21,7 +21,7 @@ load_dotenv(override=True)
 # サブエージェント【1】：データ分析担当
 # ──────────────────────────────────────────────────────────────────────────────
 analysis_agent = LlmAgent(
-    model="gemini-2.5-flash",
+    model="gemini-3.6-flash",
     name="analysis_agent",
     description="現状の課題と問題点を特定する専門エージェント",
     instruction="""
@@ -36,7 +36,7 @@ analysis_agent = LlmAgent(
 # サブエージェント【2】：改善提案担当
 # ──────────────────────────────────────────────────────────────────────────────
 proposal_agent = LlmAgent(
-    model="gemini-2.5-flash",
+    model="gemini-3.6-flash",
     name="proposal_agent",
     （各対策を実施した場合の期待効果）
 
@@ -49,7 +49,7 @@ proposal_agent = LlmAgent(
 # サブエージェント【3】：レポートまとめ担当
 # ──────────────────────────────────────────────────────────────────────────────
 summary_agent = LlmAgent(
-    model="gemini-2.5-flash",
+    model="gemini-3.6-flash",
     name="summary_agent",
     description="分析と提案を統合して、わかりやすいエグゼクティブサマリーを作成する専門エージェント",
     instruction="""
@@ -106,7 +106,7 @@ summary_agent = LlmAgent(
 # │  教科書の AgentTool や A2A SDK の章を参照してください。
 # └─────────────────────────────────────────────────────────────────────────────
 root_agent = LlmAgent(
-    model="gemini-2.5-flash",
+    model="gemini-3.6-flash",
     name="coordinator_agent",
     instruction="""
     あなたはマルチエージェントチームのコーディネーター（指揮者）です。
