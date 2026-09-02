@@ -76,7 +76,8 @@ GitHubのテンプレート機能を利用して、自分専用のリポジト�
 
 ### ステップ 1：GitHubテンプレートから自分専用のリポジトリを作成する
 
-1. ブラウザで講師から案内された **テンプレートリポジトリのページ** を開きます。
+1. ブラウザで以下の **テンプレートリポジトリのページ** にアクセスします：
+   - 🔗 **[https://github.com/masatokg/multi-agent-ai-course-template](https://github.com/masatokg/multi-agent-ai-course-template)**
 2. ページ右上にある緑色の **「Use this template」** ボタンをクリックし、**「Create a new repository」** を選択します。
 3. 以下の項目を設定します：
    - **Repository name**: 自分好みの名前を入力（例: `my-multi-agent-course`）
