@@ -124,38 +124,27 @@ def main():
     # │【教科書との差分【4】】セッションとランナーの初期化
     # │
     # │【本ファイル（実行用）】
-    # │      # │  session = runner.session_service.create_session_sync(...)
-    # │  # 💡 【重要：google-adk 2.8.0以降のセッション管理仕様】
-# 最新の google-adk では Runner（司令塔）が内部で専用の session_service を管理します。
-# `runner.session_service.create_session_sync(...)` からセッションを発行することで
-# 会話履歴の不一致や Session not found エラーを防止します。
-    runner = InProcessRunner(agent=root_agent, ...)
+    # │  runner = InProcessRunner(agent=root_agent, app_name="hello_agent_app")
+    # │  session = runner.session_service.create_session_sync(app_name="hello_agent_app", user_id="student_001")
     # │
     # │【教科書のサンプルコード（イメージ）】
     # #  response = agent.run("こんにちは")   # 簡略1行版
     # │
-    # │【補足説明】
-    # │  ADK では「セッション」と「ランナー」を明示的に用意します。
-    # │  - セッション : 会話の文脈（誰が・どの会話か）を管理する「会話ノート」
-    # │  - ランナー   : エージェントを実際に動かす「司令塔」
-    # │  教科書の簡略版コードでは内部で自動処理されているため
-    # │  見えていないことがありますが、実際には同じ仕組みが動いています。
+    # │【補足説明 (google-adk 2.8.0+)】
+    # │  最新の ADK では Runner が内部で専用の session_service を管理します。
+    # │  `runner.session_service.create_session_sync(...)` からセッションを発行することで
+    # │  会話履歴の不一致や Session not found エラーを防止します。
     # └─────────────────────────────────────────────────────────────────────────
-    # セッションサービスの初期化（エージェントの「記憶」を管理）
-        session = runner.session_service.create_session_sync(
-        app_name="hello_agent_app",
-        user_id="student_001",
-    )
-
     # ランナーの初期化（エージェントを実際に動かす仕組み）
-    # 💡 【重要：google-adk 2.8.0以降のセッション管理仕様】
-# 最新の google-adk では Runner（司令塔）が内部で専用の session_service を管理します。
-# `runner.session_service.create_session_sync(...)` からセッションを発行することで
-# 会話履歴の不一致や Session not found エラーを防止します。
     runner = InProcessRunner(
         agent=root_agent,
         app_name="hello_agent_app",
-        
+    )
+
+    # セッションの作成（会話ノートの初期化）
+    session = runner.session_service.create_session_sync(
+        app_name="hello_agent_app",
+        user_id="student_001",
     )
 
     print("  ✅ エージェントの準備ができました！")

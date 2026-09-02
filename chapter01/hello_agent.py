@@ -107,7 +107,7 @@ def main():
     # ↓↓↓ ここに 【穴埋め【3】】 のコードを記述してください ↓↓↓
     session = None  # ← runner.session_service.create_session_sync(...) を記述
 
-        print("  ✅ エージェントの準備ができました！")
+    print("  ✅ エージェントの準備ができました！")
     print()
 
     # 会話ループ
