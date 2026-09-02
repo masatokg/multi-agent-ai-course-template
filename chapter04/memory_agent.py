@@ -1,7 +1,35 @@
 import os
 import sys
+import time
+import json
 import warnings
 import logging
+from pathlib import Path
+
+os.environ["PYTHONWARNINGS"] = "ignore"
+warnings.simplefilter("ignore")
+logging.disable(logging.CRITICAL)
+
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
+from dotenv import load_dotenv
+from google.adk.agents import LlmAgent
+from google.adk.tools import FunctionTool
+try:
+    from google.adk.runners import InMemoryRunner as InProcessRunner
+except ImportError:
+    try:
+        from google.adk.runners import Runner as InProcessRunner
+    except ImportError:
+        from google.adk.runners import InProcessRunner
+from google.genai import types
+
+load_dotenv(override=True)
+
 
 os.environ["PYTHONWARNINGS"] = "ignore"
 warnings.simplefilter("ignore")
