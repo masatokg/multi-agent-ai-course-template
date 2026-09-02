@@ -1,3 +1,5 @@
+import warnings
+warnings.filterwarnings("ignore")
 """
 basic_agent.py - 第2章 ツール付きエージェント
 

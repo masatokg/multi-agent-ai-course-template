@@ -1,3 +1,5 @@
+import warnings
+warnings.filterwarnings("ignore")
 """
 context_agent.py - 第3章 Context Engineering & Agent Skills
 

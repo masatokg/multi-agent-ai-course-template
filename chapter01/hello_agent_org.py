@@ -1,3 +1,5 @@
+import warnings
+warnings.filterwarnings("ignore")
 """
 hello_agent.py - 第1章 最初のAIエージェント
 

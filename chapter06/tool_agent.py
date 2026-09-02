@@ -1,3 +1,5 @@
+import warnings
+warnings.filterwarnings("ignore")
 """
 tool_agent.py - 第6章 MCP & ツール統合（演習用穴埋めコード）
 

@@ -1,3 +1,5 @@
+import warnings
+warnings.filterwarnings("ignore")
 """
 multi_agent.py - 第7章 A2A：マルチエージェントシステム
 

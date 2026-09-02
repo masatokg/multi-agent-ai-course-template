@@ -1,3 +1,5 @@
+import warnings
+warnings.filterwarnings("ignore")
 """
 memory_agent.py - 第4章 Session・Memory・RAG
 
