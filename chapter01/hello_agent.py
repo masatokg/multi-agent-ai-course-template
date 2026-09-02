@@ -17,7 +17,6 @@ except ImportError:
         from google.adk.runners import Runner as InProcessRunner
     except ImportError:
         from google.adk.runners import InProcessRunner
-from google.adk.sessions import InMemorySessionService
 from google.genai import types
 
 load_dotenv(override=True)
@@ -84,7 +83,7 @@ def main():
     #
     # ■ 作業指示:
     #   1. `session_service = InMemorySessionService()` を作成します。
-    #   2. `session = session_service.create_session_sync(...)` を呼び出してセッションを発行します。
+    #   2. `session = runner.session_service.create_session_sync(...)` を呼び出してセッションを発行します。
     #
     # ■ create_session の引数:
     #   - app_name : "hello_agent_app"
@@ -93,7 +92,7 @@ def main():
 
     # ↓↓↓ ここに 【穴埋め【2】】 のコードを記述してください ↓↓↓
     session_service = None  # ← InMemorySessionService() のインスタンスを作成
-    session = None          # ← session_service.create_session_sync(app_name="hello_agent_app", user_id="student_001") を記述
+    session = None          # ← runner.session_service.create_session_sync(app_name="hello_agent_app", user_id="student_001") を記述
 
     # ──────────────────────────────────────────────────────────────────────────
     # 【穴埋め【3】】実行エンジン（ランナー）の初期化

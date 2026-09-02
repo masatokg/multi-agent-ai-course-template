@@ -14,8 +14,7 @@ import os
 # │【本ファイル（実行用）】
 # │  from google.adk.agents import LlmAgent
 # │  from google.adk.runners import InProcessRunner
-# │  from google.adk.sessions import InMemorySessionService
-# │  from google.genai import types
+# │  # │  from google.genai import types
 # │
 # │【教科書のサンプルコード（イメージ）】
 # #  import google.generativeai as genai
@@ -39,7 +38,6 @@ except ImportError:
         from google.adk.runners import Runner as InProcessRunner
     except ImportError:
         from google.adk.runners import InProcessRunner
-from google.adk.sessions import InMemorySessionService
 from google.genai import types
 
 load_dotenv(override=True)
@@ -126,8 +124,7 @@ def main():
     # │【教科書との差分【4】】セッションとランナーの初期化
     # │
     # │【本ファイル（実行用）】
-    # │  session_service = InMemorySessionService()
-    # │  session = session_service.create_session_sync(...)
+    # │      # │  session = runner.session_service.create_session_sync(...)
     # │  runner = InProcessRunner(agent=root_agent, ...)
     # │
     # │【教科書のサンプルコード（イメージ）】
@@ -141,8 +138,7 @@ def main():
     # │  見えていないことがありますが、実際には同じ仕組みが動いています。
     # └─────────────────────────────────────────────────────────────────────────
     # セッションサービスの初期化（エージェントの「記憶」を管理）
-    session_service = InMemorySessionService()
-    session = session_service.create_session_sync(
+        session = runner.session_service.create_session_sync(
         app_name="hello_agent_app",
         user_id="student_001",
     )

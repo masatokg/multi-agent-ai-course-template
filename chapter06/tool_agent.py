@@ -21,7 +21,6 @@ except ImportError:
         from google.adk.runners import Runner as InProcessRunner
     except ImportError:
         from google.adk.runners import InProcessRunner
-from google.adk.sessions import InMemorySessionService
 from google.adk.tools import FunctionTool
 from google.genai import types
 
@@ -174,16 +173,13 @@ def main():
         print("  ❌ GOOGLE_API_KEY が設定されていません。")
         return
 
-    session_service = InMemorySessionService()
-    session = session_service.create_session_sync(
-        app_name="tool_agent_app",
-        user_id="student_001",
-    )
-
     runner = InProcessRunner(
         agent=root_agent,
         app_name="tool_agent_app",
-        
+    )
+    session = runner.runner.session_service.create_session_sync(
+        app_name="tool_agent_app",
+        user_id="student_001",
     )
 
     print("  ✅ エージェントの準備ができました！")

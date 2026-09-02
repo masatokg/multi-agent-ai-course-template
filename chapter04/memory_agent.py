@@ -18,7 +18,6 @@ except ImportError:
         from google.adk.runners import Runner as InProcessRunner
     except ImportError:
         from google.adk.runners import InProcessRunner
-from google.adk.sessions import InMemorySessionService
 from google.adk.tools import FunctionTool
 from google.genai import types
 
@@ -130,8 +129,7 @@ def main():
         print("  ❌ GOOGLE_API_KEY が設定されていません。")
         return
 
-    session_service = InMemorySessionService()
-
+    
     # ──────────────────────────────────────────────────────────────────────────
     # 【穴埋め【2】】会話コンテキスト（記憶）を維持するセッション作成
     # ──────────────────────────────────────────────────────────────────────────
@@ -139,12 +137,12 @@ def main():
     #   毎回の対話で同一の `session_id` を使い続けることで、AIに過去の会話履歴（文脈）を保持させます。
     #
     # ■ 作業指示:
-    #   `session_service.create_session_sync(...)` を呼び出して `session` 変数に保存してください。
+    #   `runner.session_service.create_session_sync(...)` を呼び出して `session` 変数に保存してください。
     #   - app_name: "memory_agent_app"
     #   - user_id: "student_001"
     #
     # ■ 記述例:
-    #   session = session_service.create_session_sync(
+    #   session = runner.session_service.create_session_sync(
     #       app_name="memory_agent_app",
     #       user_id="student_001",
     #   )
