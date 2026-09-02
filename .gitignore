@@ -1,0 +1,45 @@
+# Python仮想環境（インストール後に自動生成されます）
+.venv/
+venv/
+env/
+
+# Python キャッシュファイル
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# APIキーや秘密情報（絶対にGitにアップロードしないでください）
+.env
+.env.local
+*.env
+
+# 教科書データ・PDF（著作権保護のためアップロード禁止）
+教科書/
+*.pdf
+現場で役立つマルチエージェントAI設計入門_統合.pdf
+
+# テスト・作業用スクリプト
+scratch/
+
+# VS Code 設定（個人設定は共有しない）
+.vscode/settings.json
+.vscode/launch.json
+
+# データベースファイル（実行時に生成）
+*.db
+*.sqlite
+chroma_db/
+
+# ログファイル
+*.log
+logs/
+
+# ダウンロードしたパッケージ（ZIPファイル）
+packages/
+*.zip
+
+# OS固有のファイル
+.DS_Store
+Thumbs.db
+desktop.ini
